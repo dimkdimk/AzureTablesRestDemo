@@ -1,16 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace AzureTablesRestDemo
 {
-    using System;
 
     public class TestModel
     {
         public string PartitionKey;
-
         public string RowKey;
 
-        public string Price;
+        public string X1;
+        public string X2;
+        public string X3;
+        public string X4;
+
+        public string Y;
     }
 
 
@@ -20,16 +24,57 @@ namespace AzureTablesRestDemo
         {
             int responseCode;
 
-            TestModel data1 = new TestModel() { PartitionKey = "partition4", RowKey = "0000", Price = "1234" };
+            List<TestModel> data = new List<TestModel>()
+                                        {
+                                            new TestModel()
+                                                {
+                                                    PartitionKey = "sample1",
+                                                    RowKey = "0001",
+                                                    X1 = "12.34",
+                                                    X2 = "15",
+                                                    X3 = "13",
+                                                    X4 = "true",
+                                                    Y = "1"
+                                                },
+                                            new TestModel()
+                                                {
+                                                    PartitionKey = "sample1",
+                                                    RowKey = "0002",
+                                                    X1 = "10.34",
+                                                    X2 = "14",
+                                                    X3 = "16",
+                                                    X4 = "false",
+                                                    Y = "0"
+                                                },
+                                            new TestModel()
+                                                {
+                                                    PartitionKey = "sample1",
+                                                    RowKey = "0003",
+                                                    X1 = "12.5",
+                                                    X2 = "11",
+                                                    X3 = "17",
+                                                    X4 = "true",
+                                                    Y = "1"
+                                                },
+                                            new TestModel()
+                                                {
+                                                    PartitionKey = "sample1",
+                                                    RowKey = "0004",
+                                                    X1 = "11.55",
+                                                    X2 = "12",
+                                                    X3 = "10",
+                                                    X4 = "false",
+                                                    Y = "1"
+                                                }
+                                        };
 
-            for (int i = 0; i < 10; i++)
+            foreach (var datasample in data)
             {
-                data1.RowKey = string.Format("{0:00000}", i);
                 responseCode = AzureTableHelper.InsertEntity(
                     "atdemo",
                     "LPhE7jj52iGFwESTWHfupKJhp/36W2Fv9UNzsQbVWq/VveGGF39Sx930U/GjlZFliWgzgMQ1p68aW9lmb+H+Ag==",
                     "mytable",
-                    JsonConvert.SerializeObject(data1));
+                    JsonConvert.SerializeObject(datasample));
                 System.Console.WriteLine("InsertEntity response = {0}", responseCode);
             }
 
@@ -40,6 +85,7 @@ namespace AzureTablesRestDemo
                 "LPhE7jj52iGFwESTWHfupKJhp/36W2Fv9UNzsQbVWq/VveGGF39Sx930U/GjlZFliWgzgMQ1p68aW9lmb+H+Ag==",
                 "mytable()",
                 out jsonData);
+
             System.Console.WriteLine("Request table response = {0}", responseCode);
             System.Console.WriteLine("JSON response = {0}", jsonData);
         }
